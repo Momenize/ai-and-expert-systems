@@ -6,11 +6,22 @@ Yes, I do used chatbots for implementing as it's obvious if you look up the code
 
 
 
-Got any advices or wanna flirt? Reach out: <br />
-      `mojtabamomenaei@gmail.com`
+## Got any advices or wanna flirt? 
+Reach out: <br />
+```
+mojtabamomenaei@gmail.com
+```
 
-
-Want to contribute with this one?
+## Want to contribute with this one?
 clone this repo into your local machine: <br />
-  `SSH`: `git clone git@github.com:Momenize/ai-and-expert-systems.git`<br />
-  `HTTPS`: `git clone https://github.com/Momenize/ai-and-expert-systems.git`<br />
+###  SSH: <br />
+  
+  ```
+  git clone git@github.com:Momenize/ai-and-expert-systems.git
+  ```
+
+###  HTTPS: <br />
+  
+  ```
+  git clone https://github.com/Momenize/ai-and-expert-systems.git
+  ```
