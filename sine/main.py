@@ -1,3 +1,5 @@
+from operator import indexOf
+
 import numpy as np
 import random
 
@@ -29,8 +31,9 @@ def init_population():
 # Tournament selection
 def tournament_selection(pop, fitness_values, k=3):
     selected = random.sample(range(POP_SIZE), k)
-    best = max(selected, key=lambda i: fitness_values[i])
-    return pop[best]
+    optimal_x = max(selected, key=lambda i: fitness_values[i])
+
+    return pop[optimal_x]
 
 
 # Crossover (randomly pick 20% of population and swap a random segment)
