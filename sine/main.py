@@ -33,20 +33,36 @@ def tournament_selection(pop, fitness_values, k=3):
     return pop[best]
 
 
-# Crossover (random gene swap)
-def crossover(parent1, parent2):
-    if random.random() < CROSSOVER_RATE:
-        child1, child2 = parent1[:], parent2[:]
-        for i in range(CHROMO_LENGTH):
-            if random.random() < 0.5:  # 50% chance to swap each gene
-                child1[i], child2[i] = child2[i], child1[i]
-        return child1, child2
-    return parent1, parent2
+# Crossover (randomly pick 20% of population and swap a random segment)
+def crossover(population):
+    num_crossovers = int(CROSSOVER_RATE * POP_SIZE)
+    selected_indices = random.sample(range(POP_SIZE), num_crossovers)
+    random.shuffle(selected_indices)  # Shuffle to ensure random pairs
+
+    for i in range(0, len(selected_indices) - 1, 2):
+        p1, p2 = selected_indices[i], selected_indices[i + 1]
+
+        # Choose two random crossover points
+        start, end = sorted(random.sample(range(CHROMO_LENGTH), 2))
+
+        # Swap the bits between the indices
+        population[p1][start:end], population[p2][start:end] = (
+            population[p2][start:end], population[p1][start:end]
+        )
+
+    return population
 
 
-# Mutation (randomly pick ONE index and flip it)
-def mutate(chromosome):
-    return [gene if random.random() > MUTATION_RATE else 1 - gene for gene in chromosome]
+# Mutation (generate one random index and flip it for each randomly selected chromosome)
+def mutate(population):
+    num_mutations = int(MUTATION_RATE * len(population))
+    selected_indices = random.sample(range(len(population)), num_mutations)
+    mutation_index = random.randint(0, CHROMO_LENGTH - 1)  # Generate a single random index
+
+    for i in selected_indices:
+        population[i][mutation_index] = 1 - population[i][mutation_index]  # Flip bit at the generated index
+
+    return population
 
 
 # Genetic Algorithm
@@ -70,11 +86,15 @@ def genetic_algorithm():
             p1 = tournament_selection(population, fitness_values)
             p2 = tournament_selection(population, fitness_values)
 
-            offspring1, offspring2 = crossover(p1, p2)
-
-            new_population.append(mutate(offspring1))
+            new_population.append(p1[:])
             if len(new_population) < POP_SIZE:
-                new_population.append(mutate(offspring2))
+                new_population.append(p2[:])
+
+        # Apply crossover
+        new_population = crossover(new_population)
+
+        # Apply mutation
+        new_population = mutate(new_population)
 
         population = new_population
 
