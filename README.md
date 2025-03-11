@@ -1,6 +1,6 @@
 ## Hi!
 
-This is my codes and projects for my Artifical Intelligence and Expert Systems
+This is my codes and projects for my Artifical Intelligence and Expert Systems Study.
 
 Yes, I do used chatbots for implementing as it's obvious if you look up the code. That's because I'm not too skilled in python.
 
