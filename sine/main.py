@@ -99,11 +99,11 @@ def genetic_algorithm():
         population = new_population
 
         # Print best solution per generation
-        best_x = decode(population[0])
-        print(f"Generation {gen + 1}: Best x = {best_x:.4f}, sin(x) = {np.sin(best_x):.4f}")
+        x = decode(population[0])
+        print(f"Generation {gen + 1}: Best x = {x:.4f}, sin(x) = {np.sin(x):.4f}")
 
     return decode(population[0])
 
 
-best_x = genetic_algorithm()
-print(f"Optimal x: {best_x:.4f}, sin(x) = {np.sin(best_x):.4f}")
+best = genetic_algorithm()
+print(f"Optimal x: {best:.4f}, sin(x) = {np.sin(best):.4f}")
