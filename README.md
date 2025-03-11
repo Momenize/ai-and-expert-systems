@@ -7,10 +7,10 @@ Yes, I do used chatbots for implementing as it's obvious if you look up the code
 
 
 ## Got any advices or wanna flirt? 
-Reach out: <br />
-```
+Reach out: 
+`
 mojtabamomenaei@gmail.com
-```
+`
 
 ## Want to contribute with this one?
 clone this repo into your local machine: <br />
