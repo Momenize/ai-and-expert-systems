@@ -6,7 +6,7 @@ Winter-Spring 2025
 
 
 ## First of All
-Yes, I do used chatbots for implementing as it's obvious if you look up the code. That's because I'm not too skilled in python.
+Yes, I do use chatbots for implementing as it's obvious if you look up the code. That's because I'm not too skilled in python.
 
 
 
