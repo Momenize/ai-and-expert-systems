@@ -2,7 +2,7 @@ import chromosome
 from function import Function
 import genetic_algorithm
 from genetic_algorithm import initialization
-GENERATIONS_COUNT = 1000
+GENERATIONS_COUNT = 100
 
 if __name__ == '__main__':
     function = Function()

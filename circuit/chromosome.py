@@ -9,17 +9,22 @@ class Chromosome:
         for i in range(TABLE_LENGTH):
             input_1 = random.choice([0, 1, 2, 3])
             input_2 = random.choice([0, 1, 2, 3])
-            self.table[0, i] = Gene(get_inputs(input_1), get_inputs(input_2), random.choice(list(Gate)))
+            self.table[0, i] = Gene(get_inputs(input_1), get_inputs(input_2), random.choice(list(Gate)), input_1, input_2, i)
         for i in range(1, TABLE_LENGTH):
             for j in range(0, TABLE_LENGTH):
                 input_1 = random.choice([self.table[i - 1, k] for k in range(TABLE_LENGTH)])
                 input_2 = random.choice([self.table[i - 1, k] for k in range(TABLE_LENGTH)])
-                self.table[i, j] = Gene(input_1.outputs, input_2.outputs, random.choice(list(Gate)))
+                self.table[i, j] = Gene(input_1.outputs, input_2.outputs,
+                                        random.choice(list(Gate)),
+                                        input_1.wire_out, input_2.wire_out,
+                                        j)
         in1 = random.choice(self.table[3])
         in2 = random.choice(self.table[3])
         self.last_gene = Gene(
             in1.outputs, in2.outputs,
-            random.choice(list(Gate))
+            random.choice(list(Gate)),
+            in1.wire_out, in2.wire_out,
+            0
         )
         match_counts = 0
         for i in range(len(self.last_gene.outputs)):

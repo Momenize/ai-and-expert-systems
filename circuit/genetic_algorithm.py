@@ -1,4 +1,6 @@
 import random
+
+import chromosome
 from gene import Gate, Gene
 from chromosome import Chromosome, TABLE_LENGTH
 from function import Function
@@ -24,29 +26,42 @@ def selection(population: list[Chromosome]):
 
 def elites(population: list[Chromosome]) -> list[Chromosome]:
     cop = population.copy()
-    cop.sort(reverse=True, key=lambda chromosome: chromosome.score)
+    cop.sort(reverse=True, key=lambda ch: ch.score)
     return cop[:int(POPULATION_SIZE * ELITISM_RATE)]
 
 
 def rec_mutate(population: list[Chromosome], row: int, col: int, ind: int, this_gene: Gene):
-    new_gene = Gene(this_gene.input1,
-                    this_gene.input2,
-                    random.choice(list(Gate)))
+    if row != 0:
+        new_gene = Gene(population[ind].table[row - 1, this_gene.wire1].outputs,
+                        population[ind].table[row - 1, this_gene.wire2].outputs,
+                        random.choice(list(Gate)),
+                        this_gene.wire1, this_gene.wire2,
+                        col)
+    else:
+        new_gene = Gene(chromosome.get_inputs(this_gene.wire1),
+                        chromosome.get_inputs(this_gene.wire2),
+                        random.choice(list(Gate)),
+                        this_gene.wire1, this_gene.wire2,
+                        col)
+    population[ind].table[row, col] = new_gene
     if row != TABLE_LENGTH - 1:
         for i in range(TABLE_LENGTH):
-            if (population[ind].table[row + 1, i].input1 == this_gene or
-                    population[ind].table[row + 1, i].input2 == this_gene):
-                rec_mutate(population, row + 1, i, ind, population[ind].table[row + 1, i])
+            if population[ind].table[row + 1, i].wire1 == col or population[ind].table[row + 1, i].wire2 == col:
+                rec_mutate(population, row + 1, i, ind, new_gene)
     else:
-        if population[ind].last_gene.input1 == this_gene:
+        if population[ind].last_gene.wire1 == new_gene.wire_out:
             population[ind].last_gene = Gene(new_gene.outputs,
                                              population[ind].last_gene.input2,
-                                             population[ind].last_gene.gate)
-        elif population[ind].last_gene.input2 == this_gene:
+                                             population[ind].last_gene.gate,
+                                             new_gene.wire_out, population[ind].last_gene.wire2,
+                                             0)
+        elif population[ind].last_gene.wire2 == new_gene.wire_out:
             population[ind].last_gene = Gene(population[ind].last_gene.input1,
                                              new_gene.outputs,
-                                             population[ind].last_gene.gate)
-    population[ind].table[row, col] = new_gene
+                                             population[ind].last_gene.gate,
+                                             population[ind].last_gene.wire1, new_gene.wire_out,
+                                             0)
+
 def mutate(population: list[Chromosome], function: Function):
     chromosomes = random.choices(range(len(population)), k=int(len(population) * MUTATION_RATE))
     for i in chromosomes:
@@ -54,7 +69,9 @@ def mutate(population: list[Chromosome], function: Function):
         if num == 16:
             population[i].last_gene = Gene(population[i].last_gene.input1,
                                            population[i].last_gene.input2,
-                                           random.choice(list(Gate)))
+                                           random.choice(list(Gate)),
+                                           population[i].last_gene.wire1, population[i].last_gene.wire2,
+                                           0)
 
         else:
             row = num // TABLE_LENGTH

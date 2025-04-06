@@ -1,11 +1,14 @@
 from enum import Enum
 INPUTS_COUNT = 4
 class Gene:
-    def __init__(self, input1, input2, gate):
+    def __init__(self, input1, input2, gate, wire1, wire2, wire_out):
         self.input1 = input1
         self.input2 = input2
         self.gate = gate
         self.outputs = None
+        self.wire1 = wire1
+        self.wire2 = wire2
+        self.wire_out = wire_out
         self.output()
 
     def output(self):
