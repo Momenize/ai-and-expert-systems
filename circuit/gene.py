@@ -1,3 +1,4 @@
+import random
 from enum import Enum
 INPUTS_COUNT = 4
 class Gene:
@@ -13,21 +14,27 @@ class Gene:
 
     def output(self):
         if self.gate.value == 0:
-            self.outputs = [self.input1[i] and self.input2[i] for i in range(INPUTS_COUNT ** 2)]
+            self.outputs = [int(bool(self.input1[i]) and bool(self.input2[i])) for i in range(INPUTS_COUNT ** 2)]
         elif self.gate.value == 1:
-            self.outputs = [self.input1[i] or self.input2[i] for i in range(INPUTS_COUNT ** 2)]
+            self.outputs = [int(bool(self.input1[i]) or bool(self.input2[i])) for i in range(INPUTS_COUNT ** 2)]
         elif self.gate.value == 2:
-            self.outputs = [not (self.input1[i] and self.input2[i]) for i in range(INPUTS_COUNT ** 2)]
+            self.outputs = [int(not (bool(self.input1[i]) and bool(self.input2[i]))) for i in range(INPUTS_COUNT ** 2)]
         elif self.gate.value == 3:
-            self.outputs = [not (self.input1[i] or self.input2[i]) for i in range(INPUTS_COUNT ** 2)]
+            self.outputs = [int(not (bool(self.input1[i]) or bool(self.input2[i]))) for i in range(INPUTS_COUNT ** 2)]
         elif self.gate.value == 4:
-            self.outputs = [self.input1[i] != self.input2[i] for i in range(INPUTS_COUNT ** 2)]
+            self.outputs = [int(bool(self.input1[i]) != bool(self.input2[i])) for i in range(INPUTS_COUNT ** 2)]
         elif self.gate.value == 5:
-            self.outputs = [self.input1[i] == self.input2[i] for i in range(INPUTS_COUNT ** 2)]
+            self.outputs = [int(bool(self.input1[i]) == bool(self.input2[i])) for i in range(INPUTS_COUNT ** 2)]
         elif self.gate.value == 6:
-            self.outputs = [self.input1[i] for i in range(INPUTS_COUNT ** 2)]
+            if random.randint(0, 1) == 0:
+                self.outputs = [self.input1[i] for i in range(INPUTS_COUNT ** 2)]
+            else:
+                self.outputs = [self.input2[i] for i in range(INPUTS_COUNT ** 2)]
         elif self.gate.value == 7:
-            self.outputs = [not self.input1[i] for i in range(INPUTS_COUNT ** 2)]
+            if random.randint(0, 1) == 0:
+                self.outputs = [1 - int(self.input1[i]) for i in range(INPUTS_COUNT ** 2)]
+            else:
+                self.outputs = [1 - int(self.input2[i]) for i in range(INPUTS_COUNT ** 2)]
 
 
 

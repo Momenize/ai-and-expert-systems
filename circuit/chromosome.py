@@ -18,14 +18,7 @@ class Chromosome:
                                         random.choice(list(Gate)),
                                         input_1.wire_out, input_2.wire_out,
                                         j)
-        in1 = random.choice(self.table[3])
-        in2 = random.choice(self.table[3])
-        self.last_gene = Gene(
-            in1.outputs, in2.outputs,
-            random.choice(list(Gate)),
-            in1.wire_out, in2.wire_out,
-            0
-        )
+        self.last_gene = random.choice(self.table[TABLE_LENGTH - 1])
         match_counts = 0
         for i in range(len(self.last_gene.outputs)):
             if self.last_gene.outputs[i] == bool(function.terms[i]):
@@ -41,7 +34,7 @@ class Chromosome:
 
     def write_to_file(self, generation: int):
         f = open("answer.txt", "a")
-        f.write('Generation ' f'{generation}:\n\n')
+        f.write('Generation ' f'{generation + 1}:\n\n')
         text = ''
         for inp in range(INPUTS_COUNT ** 2):
             str_text = f'{inp:04b}', ': ', f'{int(self.last_gene.outputs[inp] == True)}\n'
