@@ -1,4 +1,3 @@
-import chromosome
 from function import Function
 import genetic_algorithm
 from genetic_algorithm import initialization

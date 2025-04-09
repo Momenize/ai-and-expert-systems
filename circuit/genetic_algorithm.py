@@ -83,21 +83,29 @@ def crossover(population: list[Chromosome], function: Function):
     indices = random.choices(range(len(population)), k=int(len(population) * CROSSOVER_RATE))
     for index in indices:
         next_index = random.choice(indices)
-        first_last_row = population[index].table[TABLE_LENGTH - 1]
-        for i in range(TABLE_LENGTH):
-            population[index].table[TABLE_LENGTH - 1, i] = Gene(
-                population[index].table[TABLE_LENGTH - 2, population[next_index].table[TABLE_LENGTH - 1, i].wire1].outputs,
-                population[index].table[TABLE_LENGTH - 2, population[next_index].table[TABLE_LENGTH - 1, i].wire2].outputs,
-                population[next_index].table[TABLE_LENGTH - 1, i].gate,
-                population[next_index].table[TABLE_LENGTH - 1, i].wire1,
-                population[next_index].table[TABLE_LENGTH - 1, i].wire2,
-                i)
-            population[next_index].table[TABLE_LENGTH - 1, i] = Gene(population[next_index].table[TABLE_LENGTH - 2, first_last_row[i].wire1].outputs,
-                                                                     population[next_index].table[TABLE_LENGTH - 2, first_last_row[i].wire2].outputs,
-                                                                     first_last_row[i].gate,
-                                                                     first_last_row[i].wire1, first_last_row[i].wire2,
-                                                                     TABLE_LENGTH - 1)
-        population[index].last_gene = population[index].table[TABLE_LENGTH - 1, population[next_index].last_gene.wire_out]
-        population[next_index].last_gene = population[next_index].table[TABLE_LENGTH - 1, population[index].last_gene.wire_out]
-        population[index].update_score(function)
-        population[next_index].update_score(function)
+        row = random.randint(0, TABLE_LENGTH - 1)
+        exec_crossover(population, index, next_index, row, function)
+
+
+def exec_crossover(population: list[Chromosome], first_index: int, second_index: int, row: int, function: Function):
+    if row == 0:
+        population[first_index], population[second_index] = population[second_index], population[first_index]
+        return
+    for i in range(row, TABLE_LENGTH):
+        for j in range(TABLE_LENGTH):
+            gene = population[first_index].table[i, j]
+            population[first_index].table[i, j] = Gene(population[first_index].table[i - 1, population[second_index].table[i, j].wire1].outputs,
+                                                       population[first_index].table[i - 1, population[second_index].table[i, j].wire2].outputs,
+                                                       population[second_index].table[i, j].gate,
+                                                       population[second_index].table[i, j].wire1,
+                                                       population[second_index].table[i, j].wire2,
+                                                       j)
+            population[second_index].table[i, j] = Gene(population[second_index].table[i - 1, gene.wire1].outputs,
+                                                        population[second_index].table[i - 1, gene.wire2].outputs,
+                                                        gene.gate,
+                                                        gene.wire1, gene.wire2,
+                                                        j)
+    population[first_index].last_gene = random.choice(population[first_index].table[TABLE_LENGTH - 1])
+    population[second_index].last_gene = random.choice(population[second_index].table[TABLE_LENGTH - 1])
+    population[first_index].update_score(function)
+    population[second_index].update_score(function)
