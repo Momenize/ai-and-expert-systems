@@ -4,8 +4,9 @@ num_of_inputs = 4
 class Function:
     def __init__(self):
         self.terms = []
-        for i in range(num_of_inputs ** 2):
-            self.terms.append(random.choice([0, 1]))
+        # self.terms.extend([0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0])
+        for i in range(2 ** num_of_inputs):
+            self.terms.append(random.randint(0, 1))
         self.write_to_file()
 
     def write_to_file(self):
