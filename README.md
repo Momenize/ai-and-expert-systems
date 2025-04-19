@@ -1,6 +1,6 @@
 ## Hi!
 
-This is my codes and projects for my Artifical Intelligence and Expert Systems Study at Vali-e Asr University of Rafsanjan (VRU)<br />
+These are my codes and projects for my Artifical Intelligence and Expert Systems Study at Vali-e Asr University of Rafsanjan (VRU)<br />
 Professor: PhD. Mohsen Haj Abdollahi<br />
 Winter-Spring 2025
 
