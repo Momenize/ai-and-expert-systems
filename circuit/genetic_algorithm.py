@@ -4,8 +4,8 @@ from chromosome import Chromosome, TABLE_LENGTH, get_inputs
 from function import Function
 POPULATION_SIZE = 500
 ELITISM_RATE = 0.1
-CROSSOVER_RATE = 0.6
-MUTATION_RATE = 0.6
+CROSSOVER_RATE = 0.3
+MUTATION_RATE = 0.3
 
 def initialization(function: Function):
     return [Chromosome(function) for _ in range(POPULATION_SIZE)]
@@ -64,90 +64,48 @@ def mutate(population: list[Chromosome], function: Function):
 
 def crossover(population: list[Chromosome], function: Function):
     indices = random.choices(range(int(len(population) * ELITISM_RATE), len(population)), k=int(len(population) * CROSSOVER_RATE))
-    row0 = random.randint(0, TABLE_LENGTH - 1)
-    col0 = random.randint(0, TABLE_LENGTH - 1)
-    row1 = random.randint(0, TABLE_LENGTH - 1)
-    col1 = random.randint(0, TABLE_LENGTH - 1)
-    if row0 == 0:
-        for index in indices:
-            first_gene = population[index].table[row0, col0]
-            second_index = random.choice(indices)
-            population[index].table[row0, col0] = Gene(get_inputs(population[second_index].table[row0, col0].wire1),
-                                                       get_inputs(population[second_index].table[row0, col0].wire2),
-                                                                  population[second_index].table[row0, col0].gate,
-                                                                  population[second_index].table[row0, col0].wire1,
-                                                       population[second_index].table[row0, col0].wire2,
-                                                       col0)
-            population[second_index].table[row0, col0] = Gene(get_inputs(first_gene.wire1),
-                                                              get_inputs(first_gene.wire2),
-                                                              first_gene.gate,
-                                                              first_gene.wire1, first_gene.wire2,
-                                                              col0)
-            population[index].refresh(row0)
-            population[second_index].refresh(row0)
-            population[index].update_score(function)
-            population[second_index].update_score(function)
-    else:
-        for index in indices:
-            first_gene = population[index].table[row0, col0]
-            second_index = random.choice(indices)
-            population[index].table[row0, col0] = Gene(population[index].table[row0 - 1, population[second_index].table[row0, col0].wire1].outputs,
-                                                       population[index].table[row0 - 1, population[second_index].table[row0, col0].wire2].outputs,
-                                                       population[second_index].table[row0, col0].gate,
-                                                       population[second_index].table[row0, col0].wire1,
-                                                       population[second_index].table[row0, col0].wire2,
-                                                       col0)
-            population[second_index].table[row0, col0] = Gene(population[second_index].table[row0 - 1, first_gene.wire1].outputs,
-                                                              population[second_index].table[row0 - 1, first_gene.wire2].outputs,
-                                                              first_gene.gate,
-                                                              first_gene.wire1, first_gene.wire2,
-                                                              col0)
-            population[index].refresh(row0)
-            population[index].update_score(function)
-            population[second_index].refresh(row0)
-            population[second_index].update_score(function)
 
-    if row1 == 0:
-        for index in indices:
-            first_gene = population[index].table[row1, col1]
-            second_index = random.choice(indices)
-            population[index].table[row1, col1] = Gene(get_inputs(population[second_index].table[row1, col1].wire1),
-                                                       get_inputs(population[second_index].table[row1, col1].wire2),
-                                                                  population[second_index].table[row1, col1].gate,
-                                                                  population[second_index].table[row1, col1].wire1,
-                                                       population[second_index].table[row1, col1].wire2,
-                                                       col0)
-            population[second_index].table[row1, col1] = Gene(get_inputs(first_gene.wire1),
-                                                              get_inputs(first_gene.wire2),
-                                                              first_gene.gate,
-                                                              first_gene.wire1, first_gene.wire2,
-                                                              col0)
-            population[index].refresh(row1)
-            population[second_index].refresh(row1)
-            population[index].update_score(function)
-            population[second_index].update_score(function)
-    else:
-        for index in indices:
-            first_gene = population[index].table[row1, col1]
-            second_index = random.choice(indices)
-            population[index].table[row1, col1] = Gene(population[index].table[row1 - 1, population[second_index].table[row1, col1].wire1].outputs,
-                                                       population[index].table[row1 - 1, population[second_index].table[row1, col1].wire2].outputs,
-                                                       population[second_index].table[row1, col1].gate,
-                                                       population[second_index].table[row1, col1].wire1,
-                                                       population[second_index].table[row1, col1].wire2,
-                                                       col1)
-            population[second_index].table[row1, col1] = Gene(population[second_index].table[row1 - 1, first_gene.wire1].outputs,
-                                                              population[second_index].table[row1 - 1, first_gene.wire2].outputs,
-                                                              first_gene.gate,
-                                                              first_gene.wire1, first_gene.wire2,
-                                                              col1)
-            population[index].refresh(row1)
-            population[index].update_score(function)
-            population[second_index].refresh(row1)
-            population[second_index].update_score(function)
-        
-        
-    
+    for index in indices:
+        row0 = random.randint(0, TABLE_LENGTH - 1)
+        col0 = random.randint(0, TABLE_LENGTH - 1)
+        second_index = random.choice(indices)
+        for i in range(2):
+            if row0 == 0:
+                first_gene = population[index].table[row0, col0]
+                population[index].table[row0, col0] = Gene(get_inputs(population[second_index].table[row0, col0].wire1),
+                                                           get_inputs(population[second_index].table[row0, col0].wire2),
+                                                                      population[second_index].table[row0, col0].gate,
+                                                                      population[second_index].table[row0, col0].wire1,
+                                                           population[second_index].table[row0, col0].wire2,
+                                                           col0)
+                population[second_index].table[row0, col0] = Gene(get_inputs(first_gene.wire1),
+                                                                  get_inputs(first_gene.wire2),
+                                                                  first_gene.gate,
+                                                                  first_gene.wire1, first_gene.wire2,
+                                                                  col0)
+                population[index].refresh(row0)
+                population[second_index].refresh(row0)
+                population[index].update_score(function)
+                population[second_index].update_score(function)
+            else:
+                first_gene = population[index].table[row0, col0]
+                population[index].table[row0, col0] = Gene(population[index].table[row0 - 1, population[second_index].table[row0, col0].wire1].outputs,
+                                                           population[index].table[row0 - 1, population[second_index].table[row0, col0].wire2].outputs,
+                                                           population[second_index].table[row0, col0].gate,
+                                                           population[second_index].table[row0, col0].wire1,
+                                                           population[second_index].table[row0, col0].wire2,
+                                                           col0)
+                population[second_index].table[row0, col0] = Gene(population[second_index].table[row0 - 1, first_gene.wire1].outputs,
+                                                                  population[second_index].table[row0 - 1, first_gene.wire2].outputs,
+                                                                  first_gene.gate,
+                                                                  first_gene.wire1, first_gene.wire2,
+                                                                  col0)
+                population[index].refresh(row0)
+                population[index].update_score(function)
+                population[second_index].refresh(row0)
+                population[second_index].update_score(function)
+
+
 
 
 

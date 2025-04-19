@@ -16,6 +16,6 @@ if __name__ == '__main__':
         selected[0].write_to_file(i)
         genetic_algorithm.crossover(selected, function)
         genetic_algorithm.mutate(selected, function)
-        init_population = selected.copy()
+        init_population = selected
         final_answer = selected[0]
 
